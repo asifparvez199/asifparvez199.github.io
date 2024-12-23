@@ -115,6 +115,7 @@
     const gameContainer = document.querySelector('.game-container');
     let currentPlayer = 'X';
     let gameBoard = ['', '', '', '', '', '', '', '', ''];
+    let gameOver = false;
 
     function checkWinner() {
       const winPatterns = [
@@ -133,10 +134,12 @@
     }
 
     function handleClick(event) {
+      if (gameOver) return; // Prevent clicks after the game is over
+
       const cell = event.target;
       const index = cell.dataset.index;
 
-      if (gameBoard[index] !== '') return;
+      if (gameBoard[index] !== '') return; // Ignore click if cell is already occupied
 
       gameBoard[index] = currentPlayer;
       cell.textContent = currentPlayer;
@@ -149,6 +152,7 @@
         }, 500);
         status.textContent = `${winner} wins!`;
         gameContainer.classList.add('blur-background');
+        gameOver = true; // End the game
       } else {
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
         status.textContent = `Turn: ${currentPlayer}`;
@@ -157,6 +161,7 @@
 
     function restartGame() {
       gameBoard = ['', '', '', '', '', '', '', '', ''];
+      gameOver = false; // Reset game over flag
       cells.forEach(cell => cell.textContent = '');
       currentPlayer = 'X';
       status.textContent = 'Turn: X';
