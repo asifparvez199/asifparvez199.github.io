@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Downloader</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('https://cdn.discordapp.com/attachments/1294591208315818006/1320811263588171876/images_21.jpg?ex=676af4d8&is=6769a358&hm=422122c3d22cb0fc343c95279f80e2f86b588418388c17f06080a668d07540ab&');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .title {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      animation: fadeIn 2s;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      animation: fadeIn 3s;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, select, button {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    input {
+      width: 100%;
+    }
+
+    button {
+      background: #ff5722;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background: #e64a19;
+    }
+
+    .timer {
+      margin-top: 20px;
+      font-size: 1.5rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .animation {
+      margin-top: 20px;
+      width: 50px;
+      height: 50px;
+      border: 5px solid #ff5722;
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Advanced Media Downloader</h1>
+    <p class="subtitle">Download your favorite videos or audio files easily.</p>
+    <div class="form">
+      <input type="url" id="media-url" placeholder="Enter media URL (Direct URL)" required>
+      <select id="media-type">
+        <option value="video/mp4">Video (.mp4)</option>
+        <option value="audio/mp3">Audio (.mp3)</option>
+      </select>
+      <button id="download-btn">Download</button>
+    </div>
+    <div id="timer" class="timer hidden">Downloading in <span id="countdown">3</span> seconds...</div>
+    <div id="animation" class="animation hidden"></div>
+  </div>
+  <script>
+    const downloadBtn = document.getElementById("download-btn");
+    const mediaUrlInput = document.getElementById("media-url");
+    const mediaTypeSelect = document.getElementById("media-type");
+    const timer = document.getElementById("timer");
+    const countdown = document.getElementById("countdown");
+    const animation = document.getElementById("animation");
+
+    downloadBtn.addEventListener("click", () => {
+      const mediaUrl = mediaUrlInput.value;
+      const mediaType = mediaTypeSelect.value;
+
+      if (!mediaUrl) {
+        alert("Please enter a valid URL!");
+        return;
+      }
+
+      timer.classList.remove("hidden");
+      animation.classList.remove("hidden");
+
+      let timeLeft = 3;
+      countdown.textContent = timeLeft;
+
+      const interval = setInterval(() => {
+        timeLeft -= 1;
+        countdown.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          timer.classList.add("hidden");
+          animation.classList.add("hidden");
+          downloadFile(mediaUrl, mediaType);
+        }
+      }, 1000);
+    });
+
+    function downloadFile(url, type) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `primedark.${type.split("/")[1]}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+</html>
