@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Font Generator</title>
+    <!-- Adding Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Open+Sans&family=Poppins&family=Lora&family=Playfair+Display&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Acme&family=Rock+Salt&family=Arvo&family=Montserrat&family=Anton&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&family=Open+Sans&family=Poppins&family=Lora&family=Playfair+Display&family=Permanent+Marker&family=Fredoka+One&family=Shadows+Into+Light&family=Bebas+Neue&family=Dancing+Script&family=Lobster&family=Merriweather&family=Ubuntu&family=Oswald&family=Raleway&family=Montserrat&family=Anton&family=Tangerine&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -124,63 +124,20 @@
         <option value="Poppins">Poppins</option>
         <option value="Lora">Lora</option>
         <option value="Playfair Display">Playfair Display</option>
-        <option value="Alfa Slab One">Alfa Slab One</option>
-        <option value="Acme">Acme</option>
-        <option value="Rock Salt">Rock Salt</option>
-        <option value="Arvo">Arvo</option>
+        <option value="Permanent Marker">Permanent Marker</option>
+        <option value="Fredoka One">Fredoka One</option>
+        <option value="Shadows Into Light">Shadows Into Light</option>
+        <option value="Bebas Neue">Bebas Neue</option>
+        <option value="Dancing Script">Dancing Script</option>
+        <option value="Lobster">Lobster</option>
+        <option value="Merriweather">Merriweather</option>
+        <option value="Ubuntu">Ubuntu</option>
+        <option value="Oswald">Oswald</option>
+        <option value="Raleway">Raleway</option>
         <option value="Montserrat">Montserrat</option>
         <option value="Anton">Anton</option>
-        <option value="Gothic">Gothic</option>
-        <option value="Retro">Retro</option>
-        <option value="Script">Script</option>
-        <option value="Serif">Serif</option>
-        <option value="Sans-serif">Sans-serif</option>
-        <option value="Cursive">Cursive</option>
-        <option value="Monospace">Monospace</option>
-        <option value="Vintage">Vintage</option>
-        <option value="Calligraphy">Calligraphy</option>
-        <option value="Handwritten">Handwritten</option>
-        <option value="Modern">Modern</option>
-        <option value="Fancy">Fancy</option>
-        <option value="Minimalist">Minimalist</option>
-        <option value="Stencil">Stencil</option>
-        <option value="Graffiti">Graffiti</option>
-        <option value="3D">3D</option>
-        <option value="Brush">Brush</option>
-        <option value="Distressed">Distressed</option>
-        <option value="Abstract">Abstract</option>
-        <option value="Bold">Bold</option>
-        <option value="Italic">Italic</option>
-        <option value="Slab Serif">Slab Serif</option>
-        <option value="Techno">Techno</option>
-        <option value="Pixelated">Pixelated</option>
-        <option value="Grunge">Grunge</option>
-        <option value="Elegant">Elegant</option>
-        <option value="Rounded">Rounded</option>
-        <option value="Condensed">Condensed</option>
-        <option value="Decorative">Decorative</option>
-        <option value="Cartoon">Cartoon</option>
-        <option value="Swash">Swash</option>
-        <option value="Shadowed">Shadowed</option>
-        <option value="Neon">Neon</option>
-        <option value="Classic">Classic</option>
-        <option value="Futuristic">Futuristic</option>
-        <option value="Hand-drawn">Hand-drawn</option>
-        <option value="Outlined">Outlined</option>
-        <option value="Chunky">Chunky</option>
-        <option value="Geometric">Geometric</option>
-        <option value="Square">Square</option>
-        <option value="Angled">Angled</option>
-        <option value="Bold Italic">Bold Italic</option>
-        <option value="Wild">Wild</option>
-        <option value="Whimsical">Whimsical</option>
-        <option value="Playful">Playful</option>
-        <option value="Brushstroke">Brushstroke</option>
-        <option value="Neon Glow">Neon Glow</option>
-        <option value="Slanted">Slanted</option>
-        <option value="Wooden">Wooden</option>
-        <option value="Sharp">Sharp</option>
-        <option value="Transparent">Transparent</option>
+        <option value="Tangerine">Tangerine</option>
+        <option value="Pacifico">Pacifico</option>
     </select>
     
     <label for="textInput">Enter your text:</label>
@@ -203,77 +160,52 @@
         'Poppins': 'Poppins, sans-serif',
         'Lora': 'Lora, serif',
         'Playfair Display': 'Playfair Display, serif',
-        'Alfa Slab One': 'Alfa Slab One, serif',
-        'Acme': 'Acme, sans-serif',
-        'Rock Salt': 'Rock Salt, cursive',
-        'Arvo': 'Arvo, serif',
+        'Permanent Marker': 'Permanent Marker, cursive',
+        'Fredoka One': 'Fredoka One, cursive',
+        'Shadows Into Light': 'Shadows Into Light, cursive',
+        'Bebas Neue': 'Bebas Neue, sans-serif',
+        'Dancing Script': 'Dancing Script, cursive',
+        'Lobster': 'Lobster, cursive',
+        'Merriweather': 'Merriweather, serif',
+        'Ubuntu': 'Ubuntu, sans-serif',
+        'Oswald': 'Oswald, sans-serif',
+        'Raleway': 'Raleway, sans-serif',
         'Montserrat': 'Montserrat, sans-serif',
         'Anton': 'Anton, sans-serif',
-        'Gothic': 'Arial, sans-serif',  // Using Arial as fallback for "Gothic"
-        'Retro': 'Courier New, monospace', // Retro-like font
-        'Script': 'Brush Script, cursive',
-        'Serif': 'Georgia, serif',
-        'Sans-serif': 'Arial, sans-serif',
-        'Cursive': 'Dancing Script, cursive',
-        'Monospace': 'Courier New, monospace',
-        'Vintage': 'Georgia, serif',
-        'Calligraphy': 'Sacramento, cursive',
-        'Handwritten': 'Rock Salt, cursive',
-        'Modern': 'Lato, sans-serif',
-        'Fancy': 'Lobster, cursive',
-        'Minimalist': 'Helvetica, sans-serif',
-        'Stencil': 'Stencil, sans-serif',
-        'Graffiti': 'Permanent Marker, cursive',
-        '3D': 'Verdana, sans-serif',
-        'Brush': 'Brush Script, cursive',
-        'Distressed': 'Bangers, sans-serif',
-        'Abstract': 'Oswald, sans-serif',
-        'Bold': 'Impact, sans-serif',
-        'Italic': 'Italic, sans-serif',
-        'Slab Serif': 'Merriweather, serif',
-        'Techno': 'Orbitron, sans-serif',
-        'Pixelated': 'Press Start 2P, cursive',
-        'Grunge': 'Rock Salt, cursive',
-        'Elegant': 'Playfair Display, serif',
-        'Rounded': 'Quicksand, sans-serif',
-        'Condensed': 'Roboto Condensed, sans-serif',
-        'Decorative': 'Bungee, sans-serif',
-        'Cartoon': 'Fredoka One, cursive',
-        'Swash': 'Satisfy, cursive',
-        'Shadowed': 'Rock Salt, cursive',
-        'Neon': 'Press Start 2P, cursive',
-        'Classic': 'Georgia, serif',
-        'Futuristic': 'Orbitron, sans-serif',
-        'Hand-drawn': 'Shadows Into Light, cursive',
-        'Outlined': 'Anton, sans-serif',
-        'Chunky': 'Anton, sans-serif',
-        'Geometric': 'Bebas Neue, sans-serif',
-        'Square': 'Russo One, sans-serif',
-        'Angled': 'Tilt Prism, sans-serif',
-        'Bold Italic': 'Impact, sans-serif',
-        'Wild': 'Fredericka the Great, cursive',
-        'Whimsical': 'Rock Salt, cursive'
+        'Tangerine': 'Tangerine, cursive',
+        'Pacifico': 'Pacifico, cursive'
     };
 
     // Function to generate text based on selected font
     function generateText() {
-        const font = document.getElementById("fontSelect").value;
-        const text = document.getElementById("textInput").value;
+        const fontSelect = document.getElementById("fontSelect");
+        const textInput = document.getElementById("textInput");
+        const output = document.getElementById("output");
 
-        const outputDiv = document.getElementById("output");
-        outputDiv.style.fontFamily = fontOptions[font];
-        outputDiv.textContent = text || "Your text will appear here";
+        const selectedFont = fontSelect.value;
+        const inputText = textInput.value || "Your text will appear here";
+
+        output.style.fontFamily = fontOptions[selectedFont];
+        output.textContent = inputText;
     }
 
-    // Function to copy text to clipboard
+    // Function to copy the generated text
     function copyText() {
-        const outputDiv = document.getElementById("output");
-        const range = document.createRange();
-        range.selectNode(outputDiv);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
+        const output = document.getElementById("output");
+        const text = output.textContent;
+
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
         document.execCommand("copy");
-        document.getElementById("copyMessage").textContent = "Text copied!";
+        document.body.removeChild(textArea);
+
+        const copyMessage = document.getElementById("copyMessage");
+        copyMessage.textContent = "Text copied!";
+        setTimeout(() => {
+            copyMessage.textContent = "";
+        }, 2000);
     }
 </script>
 
