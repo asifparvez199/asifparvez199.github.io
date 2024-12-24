@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prime Calculator</title>
+    <title>3D Stylish Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,14 +14,31 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            perspective: 1000px;
+            animation: background-fade 5s infinite;
         }
+
+        @keyframes background-fade {
+            0% { background-color: #0b132b; }
+            50% { background-color: #1c2541; }
+            100% { background-color: #0b132b; }
+        }
+
         .calculator {
             background: linear-gradient(to bottom right, darkred, darkblue);
             border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.7);
             padding: 20px;
-            width: 300px;
+            width: 350px;
+            transform: rotateX(10deg) rotateY(10deg);
+            animation: float 3s ease-in-out infinite;
         }
+
+        @keyframes float {
+            0%, 100% { transform: rotateX(10deg) rotateY(10deg) translateY(0); }
+            50% { transform: rotateX(5deg) rotateY(5deg) translateY(-10px); }
+        }
+
         .display {
             background-color: #1c2541;
             color: white;
@@ -32,12 +49,15 @@
             width: 100%;
             text-align: right;
             margin-bottom: 20px;
+            box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.5);
         }
+
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
         }
+
         .button {
             background-color: #3a506b;
             color: white;
@@ -46,22 +66,43 @@
             border-radius: 10px;
             padding: 15px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
         }
+
         .button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.7);
             background-color: #5bc0be;
         }
+
+        .button:active {
+            transform: translateY(2px);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
         .button.equal {
             background-color: darkred;
         }
+
         .button.equal:hover {
             background-color: red;
         }
+
         .button.clear {
             background-color: darkblue;
         }
+
         .button.clear:hover {
             background-color: blue;
+        }
+
+        .button.backspace {
+            background-color: darkgoldenrod;
+        }
+
+        .button.backspace:hover {
+            background-color: goldenrod;
         }
     </style>
 </head>
@@ -86,6 +127,7 @@
             <button class="button equal" onclick="calculate()">=</button>
             <button class="button" onclick="appendValue('+')">+</button>
             <button class="button clear" onclick="clearDisplay()">C</button>
+            <button class="button backspace" onclick="backspace()">←</button>
         </div>
     </div>
     <script>
@@ -105,6 +147,10 @@
         
         function clearDisplay() {
             display.value = '';
+        }
+        
+        function backspace() {
+            display.value = display.value.slice(0, -1);
         }
     </script>
 </body>
