@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            animation: neon-flicker 3s infinite;
+        }
+
+        @keyframes neon-flicker {
+            0%, 100% { background-color: black; }
+            50% { background-color: #111; }
+        }
+
+        h1, h2 {
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            transform: rotateX(10deg) rotateY(10deg);
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotateX(10deg) rotateY(10deg) translateY(0); }
+            50% { transform: rotateX(5deg) rotateY(5deg) translateY(-15px); }
+        }
+
+        .status {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #0ff;
+            text-shadow: 0 0 15px #0ff, 0 0 30px #0ff, 0 0 45px #0ff;
+        }
+
+        .winner-message {
+            font-size: 2.5rem;
+            margin-top: 10px;
+            color: lime;
+            text-shadow: 0 0 10px lime, 0 0 20px lime, 0 0 40px lime;
+            display: none;
+            animation: glow 3s ease-in-out;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px lime; }
+            50% { text-shadow: 0 0 30px lime; }
+            100% { text-shadow: 0 0 10px lime; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 10px;
+        }
+
+        .cell {
+            background-color: black;
+            border: 2px solid #0ff;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            line-height: 100px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .cell:hover {
+            transform: scale(1.1);
+            background-color: #222;
+        }
+
+        .cell.red {
+            color: red;
+            text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red;
+        }
+
+        .cell.blue {
+            color: blue;
+            text-shadow: 0 0 10px blue, 0 0 20px blue, 0 0 30px blue;
+        }
+
+        .restart-button {
+            background: linear-gradient(90deg, #ff0000, #0000ff);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ff0000, 0 0 20px #0000ff, 0 0 30px #ff0000;
+            animation: button-flicker 2s infinite;
+        }
+
+        @keyframes button-flicker {
+            0%, 100% { box-shadow: 0 0 10px #ff0000, 0 0 20px #0000ff; }
+            50% { box-shadow: 0 0 20px #ff0000, 0 0 40px #0000ff; }
+        }
+
+        .restart-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>3D Neon Tic Tac Toe</h1>
+        <div class="status" id="status">Red Team's Turn</div>
+        <div class="grid" id="grid"></div>
+        <button class="restart-button" onclick="restartGame()">Restart Game</button>
+        <div class="winner-message" id="winnerMessage"></div>
+    </div>
+
+    <script>
+        const grid = document.getElementById("grid");
+        const status = document.getElementById("status");
+        const winnerMessage = document.getElementById("winnerMessage");
+        let currentPlayer = "red";
+        let board = Array(9).fill(null);
+
+        function createGrid() {
+            grid.innerHTML = "";
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.dataset.index = i;
+                cell.addEventListener("click", handleCellClick);
+                grid.appendChild(cell);
+            }
+        }
+
+        function handleCellClick(event) {
+            const cell = event.target;
+            const index = cell.dataset.index;
+
+            if (board[index] || checkWinner()) return;
+
+            board[index] = currentPlayer;
+            cell.classList.add(currentPlayer);
+            cell.textContent = currentPlayer === "red" ? "X" : "O";
+
+            if (checkWinner()) {
+                displayWinner(`${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)} Team Won The Game! GG`);
+                return;
+            }
+
+            currentPlayer = currentPlayer === "red" ? "blue" : "red";
+            status.textContent = `${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)} Team's Turn`;
+        }
+
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6],
+            ];
+
+            return winningCombinations.some(combination => {
+                const [a, b, c] = combination;
+                return board[a] && board[a] === board[b] && board[a] === board[c];
+            });
+        }
+
+        function displayWinner(message) {
+            winnerMessage.textContent = message;
+            winnerMessage.style.display = "block";
+            setTimeout(() => {
+                winnerMessage.style.display = "none";
+            }, 3000);
+        }
+
+        function restartGame() {
+            board = Array(9).fill(null);
+            currentPlayer = "red";
+            status.textContent = "Red Team's Turn";
+            createGrid();
+        }
+
+        createGrid();
+    </script>
+</body>
+</html>
