@@ -11,81 +11,92 @@
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       height: 100vh;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(120deg, #3498db, #9b59b6, #e74c3c);
-      background-size: 600% 600%;
-      animation: gradientAnimation 10s ease infinite;
-    }
-
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      background-color: #ffffff; /* Pure White Background */
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      padding: 30px;
-      border-radius: 15px;
       text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
     }
 
     h1 {
       font-size: 2rem;
-      color: #fff;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    p {
+      color: #555;
       margin-bottom: 20px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     input[type="file"] {
       padding: 10px;
       font-size: 1rem;
-      color: #333;
-      border-radius: 10px;
-      border: none;
+      border: 1px solid #ddd;
+      border-radius: 5px;
       outline: none;
       cursor: pointer;
+      margin-bottom: 20px;
     }
 
     button {
-      margin-top: 20px;
       padding: 10px 20px;
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: #fff;
-      background: linear-gradient(45deg, #3498db, #9b59b6);
+      background: #3498db;
       border: none;
-      border-radius: 20px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: all 0.4s ease;
+      transition: all 0.3s ease;
     }
 
     button:hover {
-      background: linear-gradient(45deg, #e74c3c, #f1c40f);
-      transform: scale(1.1);
+      background: #2980b9;
     }
 
     #result img {
       margin-top: 20px;
       max-width: 100%;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      filter: contrast(1.1) brightness(1.1);
+    }
+
+    #downloadBtn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      color: #fff;
+      background: #27ae60;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #downloadBtn:hover {
+      background: #1e8449;
     }
 
     .loader {
-      border: 4px solid rgba(255, 255, 255, 0.2);
-      border-top: 4px solid #fff;
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-top: 5px solid #3498db;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
       animation: spin 1s linear infinite;
       margin: 20px auto;
     }
@@ -94,33 +105,44 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .fade-out {
+      animation: fadeOut 1.5s forwards;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Remove Image Background Instantly</h1>
-    <p style="color: #fff; margin-bottom: 15px;">Upload an image, and we'll remove its background for you!</p>
+    <h1>Remove Image Background</h1>
+    <p>Upload an image to remove its background and enhance it!</p>
     <input type="file" id="imageInput" accept="image/*">
     <button id="removeBgBtn">Remove Background</button>
     <div id="result"></div>
   </div>
 
   <script>
-    document.getElementById('removeBgBtn').addEventListener('click', async () => {
-      const fileInput = document.getElementById('imageInput');
-      const resultDiv = document.getElementById('result');
+    const imageInput = document.getElementById('imageInput');
+    const removeBgBtn = document.getElementById('removeBgBtn');
+    const resultDiv = document.getElementById('result');
 
-      // Clear previous result and show loader
-      resultDiv.innerHTML = '<div class="loader"></div>';
+    let downloadBtn;
 
-      if (!fileInput.files[0]) {
+    removeBgBtn.addEventListener('click', async () => {
+      if (!imageInput.files[0]) {
         alert('Please upload an image first.');
-        resultDiv.innerHTML = '';
         return;
       }
 
+      // Clear previous results and add a loader
+      resultDiv.innerHTML = '<div class="loader"></div>';
+
       const formData = new FormData();
-      formData.append('image_file', fileInput.files[0]);
+      formData.append('image_file', imageInput.files[0]);
       formData.append('size', 'auto');
 
       try {
@@ -133,12 +155,43 @@
         });
 
         if (!response.ok) {
-          throw new Error('Failed to remove background. Please check your API key or try again later.');
+          throw new Error('Failed to remove background. Please try again.');
         }
 
         const blob = await response.blob();
         const imageURL = URL.createObjectURL(blob);
-        resultDiv.innerHTML = `<img src="${imageURL}" alt="Background Removed Image">`;
+
+        // Create image element with fade-out animation
+        const img = document.createElement('img');
+        img.src = imageInput.files[0] ? URL.createObjectURL(imageInput.files[0]) : '';
+        img.alt = 'Original Image';
+        img.className = 'fade-out';
+        resultDiv.innerHTML = '';
+        resultDiv.appendChild(img);
+
+        setTimeout(() => {
+          // Display the processed image after fade-out
+          img.src = imageURL;
+          img.className = ''; // Remove animation class
+          
+          // Add download button
+          downloadBtn = document.createElement('button');
+          downloadBtn.id = 'downloadBtn';
+          downloadBtn.textContent = 'Download Image';
+          resultDiv.appendChild(downloadBtn);
+
+          // Download functionality
+          downloadBtn.addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.href = imageURL;
+            a.download = 'background-removed.png';
+            a.click();
+
+            // Allow another upload after downloading
+            imageInput.value = '';
+            resultDiv.innerHTML = ''; // Reset result
+          });
+        }, 1500);
       } catch (error) {
         alert(error.message);
         resultDiv.innerHTML = '';
