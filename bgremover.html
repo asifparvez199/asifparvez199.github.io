@@ -73,6 +73,16 @@
       background: #2980b9;
     }
 
+    #downloadBtn {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      background-color: #1abc9c;
+    }
+
+    #downloadBtn:hover {
+      background-color: #16a085;
+    }
+
     #result img {
       margin-top: 20px;
       max-width: 100%;
@@ -165,6 +175,20 @@
         // Display the processed image
         resultDiv.innerHTML = `<img src="${imageURL}" alt="Processed Image">`;
         colorOptions.style.display = 'flex'; // Show color options
+
+        // Add the download button
+        const downloadBtn = document.createElement('button');
+        downloadBtn.id = 'downloadBtn';
+        downloadBtn.textContent = 'Download Image';
+        resultDiv.appendChild(downloadBtn);
+
+        // Download functionality
+        downloadBtn.addEventListener('click', () => {
+          const a = document.createElement('a');
+          a.href = imageURL;
+          a.download = 'background-removed.png';
+          a.click();
+        });
 
         // Add live background color-changing functionality
         document.querySelectorAll('.color-option').forEach(option => {
