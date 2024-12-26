@@ -83,14 +83,33 @@
       background-color: #16a085;
     }
 
+    /* Image Style */
     #result img {
       margin-top: 20px;
       max-width: 100%;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.3s ease;
+      opacity: 0;
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
     }
 
+    /* Loading Spinner */
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      animation: spin 2s linear infinite;
+      margin: 20px 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Color Options */
     .color-options {
       margin-top: 20px;
       display: flex;
@@ -116,7 +135,7 @@
     }
 
     .color-option[data-color="none"]::before {
-      content: "✘";
+      content: "X";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -125,12 +144,13 @@
       font-weight: bold;
       font-size: 1.2rem;
     }
+
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Remove Image Background.</h1>
-    <label id="uploadImageLabel" for="imageInput">Upload Image Here</label>
+    <h1>Remove Image Background</h1>
+    <label id="uploadImageLabel" for="imageInput">Upload Image</label>
     <input type="file" id="imageInput" accept="image/*">
     <div id="result"></div>
     <div class="color-options" id="colorOptions" style="display: none;">
@@ -138,8 +158,8 @@
       <div class="color-option" data-color="skyblue" style="background: skyblue;"></div>
       <div class="color-option" data-color="blue" style="background: blue;"></div>
       <div class="color-option" data-color="white" style="background: white; border: 2px solid #ccc;"></div>
-      <div class="color-option" data-color="navyblue" style="background: navyblue;"></div>
       <div class="color-option" data-color="green" style="background: green;"></div>
+      <div class="color-option" data-color="navyblue" style="background: navy;"></div>
       <div class="color-option" data-color="none" style="background: none; border: 2px solid #ccc;"></div>
     </div>
   </div>
@@ -153,7 +173,8 @@
       const file = imageInput.files[0];
       if (!file) return;
 
-      resultDiv.innerHTML = '<p>Processing...</p>'; // Display loading text
+      // Display loading spinner
+      resultDiv.innerHTML = '<div class="loading-spinner"></div>';
       colorOptions.style.display = 'none'; // Hide color options during processing
 
       const formData = new FormData();
@@ -172,9 +193,18 @@
         const blob = await response.blob();
         const imageURL = URL.createObjectURL(blob);
 
-        // Display the processed image
-        resultDiv.innerHTML = `<img src="${imageURL}" alt="Processed Image">`;
-        colorOptions.style.display = 'flex'; // Show color options
+        // Display the processed image with fade-in effect
+        resultDiv.innerHTML = `<img src="${imageURL}" alt="Processed Image" style="opacity: 0; transform: scale(0.9);">`;
+        const img = resultDiv.querySelector('img');
+        
+        // Add image animation
+        setTimeout(() => {
+          img.style.opacity = '1';
+          img.style.transform = 'scale(1)';
+        }, 100);
+
+        // Show color options
+        colorOptions.style.display = 'flex';
 
         // Add the download button
         const downloadBtn = document.createElement('button');
@@ -186,7 +216,7 @@
         downloadBtn.addEventListener('click', () => {
           const a = document.createElement('a');
           a.href = imageURL;
-          a.download = 'background-removed.jpeg';
+          a.download = 'background-removed.png';
           a.click();
         });
 
@@ -194,7 +224,6 @@
         document.querySelectorAll('.color-option').forEach(option => {
           option.addEventListener('click', () => {
             const color = option.dataset.color;
-            const img = resultDiv.querySelector('img');
             if (color === 'none') {
               img.style.backgroundColor = 'transparent'; // Transparent background
             } else {
