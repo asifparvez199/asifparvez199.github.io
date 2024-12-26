@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Background Remover</title>
+  <title>Advanced Background Remover</title>
   <style>
     /* Reset CSS */
     * {
@@ -32,24 +32,30 @@
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 15px;
       color: #333;
     }
 
-    p {
-      color: #555;
-      margin-bottom: 20px;
+    #uploadImageLabel {
+      display: inline-block;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      color: #fff;
+      background: #3498db;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 20px 0;
+    }
+
+    #uploadImageLabel:hover {
+      background: #2980b9;
     }
 
     input[type="file"] {
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      outline: none;
-      cursor: pointer;
-      margin-bottom: 20px;
+      display: none; /* Hidden default file input */
     }
 
     button {
@@ -72,129 +78,109 @@
       max-width: 100%;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      filter: contrast(1.1) brightness(1.1);
+      transition: background-color 0.3s ease;
     }
 
-    #downloadBtn {
-      margin-top: 15px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      color: #fff;
-      background: #27ae60;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .color-options {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
     }
 
-    #downloadBtn:hover {
-      background: #1e8449;
-    }
-
-    .loader {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(0, 0, 0, 0.1);
-      border-top: 5px solid #3498db;
+    .color-option {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      border: 2px solid #ddd;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .color-option:hover {
+      transform: scale(1.1);
     }
 
-    .fade-out {
-      animation: fadeOut 1.5s forwards;
+    .color-option[data-color="none"] {
+      position: relative;
     }
 
-    @keyframes fadeOut {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
+    .color-option[data-color="none"]::before {
+      content: "X";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #333;
+      font-weight: bold;
+      font-size: 1.2rem;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Remove Image Background</h1>
-    <p>Upload an image to remove its background and enhance it!</p>
+    <label id="uploadImageLabel" for="imageInput">Upload Image</label>
     <input type="file" id="imageInput" accept="image/*">
-    <button id="removeBgBtn">Remove Background</button>
     <div id="result"></div>
+    <div class="color-options" id="colorOptions" style="display: none;">
+      <div class="color-option" data-color="lightblue" style="background: lightblue;"></div>
+      <div class="color-option" data-color="skyblue" style="background: skyblue;"></div>
+      <div class="color-option" data-color="blue" style="background: blue;"></div>
+      <div class="color-option" data-color="white" style="background: white; border: 2px solid #ccc;"></div>
+      <div class="color-option" data-color="black" style="background: black;"></div>
+      <div class="color-option" data-color="green" style="background: green;"></div>
+      <div class="color-option" data-color="none" style="background: none; border: 2px solid #ccc;"></div>
+    </div>
   </div>
 
   <script>
     const imageInput = document.getElementById('imageInput');
-    const removeBgBtn = document.getElementById('removeBgBtn');
     const resultDiv = document.getElementById('result');
+    const colorOptions = document.getElementById('colorOptions');
 
-    let downloadBtn;
+    imageInput.addEventListener('change', async () => {
+      const file = imageInput.files[0];
+      if (!file) return;
 
-    removeBgBtn.addEventListener('click', async () => {
-      if (!imageInput.files[0]) {
-        alert('Please upload an image first.');
-        return;
-      }
-
-      // Clear previous results and add a loader
-      resultDiv.innerHTML = '<div class="loader"></div>';
+      resultDiv.innerHTML = '<p>Processing...</p>'; // Display loading text
+      colorOptions.style.display = 'none'; // Hide color options during processing
 
       const formData = new FormData();
-      formData.append('image_file', imageInput.files[0]);
+      formData.append('image_file', file);
       formData.append('size', 'auto');
 
       try {
         const response = await fetch('https://api.remove.bg/v1.0/removebg', {
           method: 'POST',
-          headers: {
-            'X-Api-Key': 'eVpyvrPY2rKJLQwzEDQqkjRn'
-          },
+          headers: { 'X-Api-Key': 'eVpyvrPY2rKJLQwzEDQqkjRn' },
           body: formData
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to remove background. Please try again.');
-        }
+        if (!response.ok) throw new Error('Error removing background');
 
         const blob = await response.blob();
         const imageURL = URL.createObjectURL(blob);
 
-        // Create image element with fade-out animation
-        const img = document.createElement('img');
-        img.src = imageInput.files[0] ? URL.createObjectURL(imageInput.files[0]) : '';
-        img.alt = 'Original Image';
-        img.className = 'fade-out';
-        resultDiv.innerHTML = '';
-        resultDiv.appendChild(img);
+        // Display the processed image
+        resultDiv.innerHTML = `<img src="${imageURL}" alt="Processed Image">`;
+        colorOptions.style.display = 'flex'; // Show color options
 
-        setTimeout(() => {
-          // Display the processed image after fade-out
-          img.src = imageURL;
-          img.className = ''; // Remove animation class
-          
-          // Add download button
-          downloadBtn = document.createElement('button');
-          downloadBtn.id = 'downloadBtn';
-          downloadBtn.textContent = 'Download Image';
-          resultDiv.appendChild(downloadBtn);
-
-          // Download functionality
-          downloadBtn.addEventListener('click', () => {
-            const a = document.createElement('a');
-            a.href = imageURL;
-            a.download = 'background-removed.png';
-            a.click();
-
-            // Allow another upload after downloading
-            imageInput.value = '';
-            resultDiv.innerHTML = ''; // Reset result
+        // Add live background color-changing functionality
+        document.querySelectorAll('.color-option').forEach(option => {
+          option.addEventListener('click', () => {
+            const color = option.dataset.color;
+            const img = resultDiv.querySelector('img');
+            if (color === 'none') {
+              img.style.backgroundColor = 'transparent'; // Transparent background
+            } else {
+              img.style.backgroundColor = color; // Apply selected color
+            }
           });
-        }, 1500);
+        });
       } catch (error) {
-        alert(error.message);
-        resultDiv.innerHTML = '';
+        resultDiv.innerHTML = '<p>Failed to process the image. Try again.</p>';
+        console.error(error);
       }
     });
   </script>
