@@ -116,7 +116,7 @@
     }
 
     .color-option[data-color="none"]::before {
-      content: "X";
+      content: "✘";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -129,8 +129,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>Remove Image Background</h1>
-    <label id="uploadImageLabel" for="imageInput">Upload Image</label>
+    <h1>Remove Image Background.</h1>
+    <label id="uploadImageLabel" for="imageInput">Upload Image Here</label>
     <input type="file" id="imageInput" accept="image/*">
     <div id="result"></div>
     <div class="color-options" id="colorOptions" style="display: none;">
@@ -138,7 +138,7 @@
       <div class="color-option" data-color="skyblue" style="background: skyblue;"></div>
       <div class="color-option" data-color="blue" style="background: blue;"></div>
       <div class="color-option" data-color="white" style="background: white; border: 2px solid #ccc;"></div>
-      <div class="color-option" data-color="black" style="background: black;"></div>
+      <div class="color-option" data-color="navyblue" style="background: navyblue;"></div>
       <div class="color-option" data-color="green" style="background: green;"></div>
       <div class="color-option" data-color="none" style="background: none; border: 2px solid #ccc;"></div>
     </div>
@@ -186,7 +186,7 @@
         downloadBtn.addEventListener('click', () => {
           const a = document.createElement('a');
           a.href = imageURL;
-          a.download = 'background-removed.png';
+          a.download = 'background-removed.jpeg';
           a.click();
         });
 
