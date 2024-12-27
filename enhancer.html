@@ -63,6 +63,14 @@
         .download-btn {
             background-color: #90ee90; /* Light green */
             color: white;
+            border-radius: 5px;
+            padding: 12px 25px;
+            text-align: center;
+            margin-top: 20px;
+            width: 50%;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
         }
         .download-btn:hover {
             background-color: #32cd32; /* Darker green on hover */
@@ -92,7 +100,7 @@
         <div id="output" class="hidden">
             <h3>Enhanced Image</h3>
             <img id="enhancedImage" class="output-img" src="" alt="Enhanced Image">
-            <a id="downloadBtn" class="download-btn hidden" href="" download="enhanced-image.jpg">Download Enhanced Image</a>
+            <a id="downloadBtn" class="download-btn hidden" href="" download="enhance-image.jpeg">Download Enhanced Image</a>
         </div>
         <div class="footer">
             <p>More Better Photo is Life</p>
@@ -113,20 +121,24 @@
                 const img = new Image();
                 img.src = event.target.result;
                 img.onload = function() {
-                    // Simple "enhancement" by scaling the image size
+                    // Rescale the image to simulate enhancement by enlarging it
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    canvas.width = img.width * 2; // Doubling the size as a simple enhancement
-                    canvas.height = img.height * 2;
+                    
+                    // Increase image size by 2x (or any factor) for enhancement
+                    canvas.width = img.width * 2;  // Doubling the size
+                    canvas.height = img.height * 2;  // Doubling the size
+                    
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                    // Show the enhanced image
+                    
+                    // Convert the canvas back to an image and show it
                     const outputImg = document.getElementById('enhancedImage');
-                    outputImg.src = canvas.toDataURL();
+                    outputImg.src = canvas.toDataURL('image/jpeg', 1.0); // Use high quality (1.0) for JPEG
 
-                    // Show the download button
+                    // Show the download button with proper filename and format
                     const downloadBtn = document.getElementById('downloadBtn');
-                    downloadBtn.href = canvas.toDataURL();
+                    downloadBtn.href = canvas.toDataURL('image/jpeg', 1.0); // Ensure JPEG format
+                    downloadBtn.download = 'enhance-image.jpeg'; // Set correct filename
                     downloadBtn.classList.remove('hidden');
                     document.getElementById('output').classList.remove('hidden');
                 };
