@@ -3,179 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced Background Remover</title>
+  <title>Background Remover</title>
   <style>
-    /* Reset CSS */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
       font-family: Arial, sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #ffffff; /* Pure White Background */
-    }
-
-    .container {
       text-align: center;
-      background: #f9f9f9;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 600px;
+      background-color: #001f3f; /* Navy Blue */
+      margin: 0;
+      padding: 20px;
+      color: white; /* White text for contrast */
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      color: #333;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #ffffff; /* White for header */
     }
 
-    #uploadImageLabel {
+    label {
       display: inline-block;
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      color: #fff;
-      background: #3498db;
-      border: none;
+      padding: 10px 20px;
+      background-color: #001f3f; /* Navy Blue */
+      color: white;
+      border: 2px solid white;
       border-radius: 5px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin: 20px 0;
-    }
-
-    #uploadImageLabel:hover {
-      background: #2980b9;
+      margin-bottom: 20px;
+      font-size: 16px;
     }
 
     input[type="file"] {
-      display: none; /* Hidden default file input */
+      display: none;
     }
 
-    button {
+    button, a {
       padding: 10px 20px;
-      font-size: 1rem;
-      color: #fff;
-      background: #3498db;
-      border: none;
+      background-color: #001f3f; /* Navy Blue */
+      color: white;
+      border: 2px solid white;
       border-radius: 5px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      margin-top: 10px;
+      text-decoration: none;
     }
 
-    button:hover {
-      background: #2980b9;
+    button:hover, a:hover {
+      background-color: #003366; /* Slightly lighter Navy */
     }
 
-    #downloadBtn {
-      margin-top: 15px;
-      font-size: 1.1rem;
-      background-color: #1abc9c;
-    }
-
-    #downloadBtn:hover {
-      background-color: #16a085;
-    }
-
-    /* Image Style */
-    #result img {
+    img {
       margin-top: 20px;
       max-width: 100%;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      opacity: 0;
-      transition: opacity 1s ease-in-out, transform 1s ease-in-out, background-color 0.3s ease;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
     }
 
-    /* Loading Spinner */
     .loading-spinner {
+      margin-top: 20px;
       width: 50px;
       height: 50px;
       border: 5px solid #f3f3f3;
-      border-top: 5px solid #3498db;
+      border-top: 5px solid #001f3f; /* Navy Blue Spinner */
       border-radius: 50%;
-      animation: spin 2s linear infinite;
-      margin: 20px 0;
+      animation: spin 1s linear infinite;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
-    /* Color Options */
-    .color-options {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .color-option {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      border: 2px solid #ddd;
-    }
-
-    .color-option:hover {
-      transform: scale(1.1);
-    }
-
-    .color-option[data-color="none"] {
-      position: relative;
-    }
-
-    .color-option[data-color="none"]::before {
-      content: "X";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #333;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Remove Image Background</h1>
-    <label id="uploadImageLabel" for="imageInput">Upload Image</label>
-    <input type="file" id="imageInput" accept="image/*">
-    <div id="result"></div>
-    <div class="color-options" id="colorOptions" style="display: none;">
-      <div class="color-option" data-color="lightblue" style="background: lightblue;"></div>
-      <div class="color-option" data-color="skyblue" style="background: skyblue;"></div>
-      <div class="color-option" data-color="blue" style="background: blue;"></div>
-      <div class="color-option" data-color="white" style="background: white; border: 2px solid #ccc;"></div>
-      <div class="color-option" data-color="green" style="background: green;"></div>
-      <div class="color-option" data-color="3498db" style="background: #3498db;"></div> <!-- Corrected Blue color -->
-      <div class="color-option" data-color="none" style="background: none; border: 2px solid #ccc;"></div>
-    </div>
-  </div>
+  <h1>Background Remover</h1>
+  <label for="imageInput">Upload Image</label>
+  <input type="file" id="imageInput" accept="image/*">
+  <div id="result"></div>
 
   <script>
     const imageInput = document.getElementById('imageInput');
     const resultDiv = document.getElementById('result');
-    const colorOptions = document.getElementById('colorOptions');
 
+    // Handle image upload and background removal
     imageInput.addEventListener('change', async () => {
       const file = imageInput.files[0];
       if (!file) return;
 
-      // Display loading spinner
+      // Show loading spinner
       resultDiv.innerHTML = '<div class="loading-spinner"></div>';
-      colorOptions.style.display = 'none'; // Hide color options during processing
 
       const formData = new FormData();
       formData.append('image_file', file);
@@ -191,48 +106,17 @@
         if (!response.ok) throw new Error('Error removing background');
 
         const blob = await response.blob();
-        const imageURL = URL.createObjectURL(blob);
+        const processedImageURL = URL.createObjectURL(blob);
 
-        // Display the processed image with fade-in effect
-        resultDiv.innerHTML = `<img src="${imageURL}" alt="Processed Image" style="opacity: 0; transform: scale(0.9);">`;
-        const img = resultDiv.querySelector('img');
-        
-        // Add image animation
-        setTimeout(() => {
-          img.style.opacity = '1';
-          img.style.transform = 'scale(1)';
-        }, 100);
-
-        // Show color options
-        colorOptions.style.display = 'flex';
-
-        // Add the download button
-        const downloadBtn = document.createElement('button');
-        downloadBtn.id = 'downloadBtn';
-        downloadBtn.textContent = 'Download Image';
-        resultDiv.appendChild(downloadBtn);
-
-        // Download functionality
-        downloadBtn.addEventListener('click', () => {
-          const a = document.createElement('a');
-          a.href = imageURL;
-          a.download = 'background-removed.png';
-          a.click();
-        });
-
-        // Add live background color-changing functionality
-        document.querySelectorAll('.color-option').forEach(option => {
-          option.addEventListener('click', () => {
-            const color = option.dataset.color;
-            if (color === 'none') {
-              img.style.backgroundColor = 'transparent'; // Transparent background
-            } else {
-              img.style.backgroundColor = color; // Apply selected color
-            }
-          });
-        });
+        resultDiv.innerHTML = `
+          <div>
+            <img src="${processedImageURL}" alt="Processed Image">
+            <br>
+            <a href="${processedImageURL}" download="Processed_Image.png">Download Image</a>
+          </div>
+        `;
       } catch (error) {
-        resultDiv.innerHTML = '<p>Failed to process the image. Try again.</p>';
+        resultDiv.innerHTML = '<p style="color:white;">Error processing image. Try again.</p>';
         console.error(error);
       }
     });
