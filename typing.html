@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+    .story-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+    .input-box {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .stats {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Typing Test</h1>
+  <div class="story-box" id="story-box">
+    <!-- Story will be displayed here -->
+  </div>
+  <textarea class="input-box" id="input-box" placeholder="Start typing here..."></textarea>
+  <div class="stats">
+    <p id="timer">Time Left: <span id="time-left">60</span>s</p>
+    <p id="completed">Stories Completed: <span id="stories-completed">0</span></p>
+  </div>
+
+  <script>
+    // Predefined list of stories
+    const stories = [
+      "Once upon a time in a small village, there lived a kind old man.",
+      "The stars shone brightly as the young girl made a wish upon the comet.",
+      "In the heart of the jungle, a lone explorer braved the unknown.",
+      "The clock struck midnight, and the mysterious figure disappeared.",
+      "It was a cold and stormy night, and the cabin creaked with the wind."
+    ];
+
+    let currentStory = "";
+    let timer = 60; // Time in seconds
+    let storiesCompleted = 0;
+    const storyBox = document.getElementById("story-box");
+    const inputBox = document.getElementById("input-box");
+    const timeLeft = document.getElementById("time-left");
+    const storiesCompletedDisplay = document.getElementById("stories-completed");
+
+    // Function to load a random story
+    function loadNewStory() {
+      currentStory = stories[Math.floor(Math.random() * stories.length)];
+      storyBox.textContent = currentStory;
+      inputBox.value = ""; // Clear the input box
+    }
+
+    // Function to start the timer
+    function startTimer() {
+      const interval = setInterval(() => {
+        timer--;
+        timeLeft.textContent = timer;
+
+        if (timer <= 0) {
+          clearInterval(interval);
+          alert(`Time's up! You completed ${storiesCompleted} stories.`);
+          inputBox.disabled = true; // Disable input
+        }
+      }, 1000);
+    }
+
+    // Event listener for input changes
+    inputBox.addEventListener("input", () => {
+      if (inputBox.value.trim() === currentStory) {
+        storiesCompleted++;
+        storiesCompletedDisplay.textContent = storiesCompleted;
+        loadNewStory(); // Load the next story
+      }
+    });
+
+    // Initialize the test
+    loadNewStory();
+    startTimer();
+  </script>
+</body>
+</html>
