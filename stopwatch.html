@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        /* Set the background image */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://cdn.discordapp.com/attachments/1326576057020579972/1327677066648354858/download.jpg?ex=6783ef1f&is=67829d9f&hm=53d4ec86c3b419130f1c79892725b15a4e4984ddac52a7d39495661fa1bbb9b1&'); /* Replace with your image URL */
+            background-size: cover; /* Ensure the image covers the entire screen */
+            background-position: center center; /* Center the image */
+            background-attachment: fixed; /* Keep the background fixed when scrolling */
+        }
+
+        .stopwatch-container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); /* Transparent white background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 24px;
+            color: #0a0000;
+        }
+
+        .time-display {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .controls button:hover {
+            background-color: #45a049;
+        }
+
+        #reset {
+            background-color: #f44336;
+        }
+
+        #reset:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch-container">
+        <h1>Stopwatch</h1>
+        <div id="time" class="time-display">00:00:00</div>
+        <div class="controls">
+            <button id="startStop" onclick="startStop()">Start</button>
+            <button id="reset" onclick="reset()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let isRunning = false;
+        let seconds = 0;
+        let minutes = 0;
+        let hours = 0;
+        let interval;
+
+        // Function to format time with leading zeros if needed
+        function formatTime(unit) {
+            return unit < 10 ? '0' + unit : unit;
+        }
+
+        // Function to update the time display
+        function updateTimeDisplay() {
+            const timeDisplay = document.getElementById("time");
+            timeDisplay.innerHTML = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+        }
+
+        // Start or stop the stopwatch
+        function startStop() {
+            if (isRunning) {
+                clearInterval(interval); // Stop the stopwatch
+                document.getElementById("startStop").innerText = "Start";
+            } else {
+                interval = setInterval(function () {
+                    seconds++;
+                    if (seconds >= 60) {
+                        seconds = 0;
+                        minutes++;
+                        if (minutes >= 60) {
+                            minutes = 0;
+                            hours++;
+                        }
+                    }
+                    updateTimeDisplay();
+                }, 1000); // Update every second
+                document.getElementById("startStop").innerText = "Stop";
+            }
+            isRunning = !isRunning;
+        }
+
+        // Reset the stopwatch
+        function reset() {
+            clearInterval(interval); // Stop the stopwatch
+            isRunning = false;
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            updateTimeDisplay();
+            document.getElementById("startStop").innerText = "Start";
+        }
+    </script>
+</body>
+</html>
