@@ -8,57 +8,45 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
-      background-color: #121212; /* Dark background */
+      background-color: #0d2538; /* Dark Navy Blue */
       margin: 0;
       padding: 20px;
-      color: #e0e0e0; /* Light text for contrast */
+      color: #ffffff; /* White text for contrast */
     }
 
     h1 {
       font-size: 2.5rem;
       margin-bottom: 20px;
-      color: #bb86fc; /* Light purple header */
+      color: #00d4ff; /* Lighter Blue for header */
     }
 
-    label {
+    label, select, button, a {
       display: inline-block;
       padding: 10px 20px;
-      background-color: #1f1f1f; /* Slightly lighter background */
-      color: #e0e0e0;
-      border: 2px solid #bb86fc;
+      background-color: #005f73; /* Dark Cyan */
+      color: #ffffff;
+      border: 2px solid #00d4ff;
       border-radius: 5px;
       cursor: pointer;
-      margin-bottom: 20px;
-      font-size: 16px;
-      transition: background-color 0.3s, border-color 0.3s;
+      margin: 10px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     input[type="file"] {
       display: none;
     }
 
-    button, a {
-      padding: 10px 20px;
-      background-color: #1f1f1f;
-      color: #e0e0e0;
-      border: 2px solid #bb86fc;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-      text-decoration: none;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-
-    button:hover, a:hover {
-      background-color: #323232; /* Lighter dark background */
-      border-color: #bb86fc;
+    label:hover, select:hover, button:hover, a:hover {
+      background-color: #0a9396; /* Slightly lighter Cyan */
+      border-color: #00f5d4;
     }
 
     img {
       margin-top: 20px;
       max-width: 100%;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
     .loading-spinner {
@@ -66,7 +54,7 @@
       width: 50px;
       height: 50px;
       border: 5px solid #f3f3f3;
-      border-top: 5px solid #bb86fc; /* Spinner in light purple */
+      border-top: 5px solid #00d4ff; /* Cyan Spinner */
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -76,19 +64,14 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Style the select dropdown */
     select {
-      background-color: #1f1f1f; /* Slightly lighter background */
-      color: #e0e0e0;
-      border: 2px solid #bb86fc;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-      transition: border-color 0.3s;
-    }
-
-    select:hover {
-      border-color: #bb86fc;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      padding-right: 20px;
+      background: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right #005f73;
+      background-size: 10px;
     }
   </style>
 </head>
@@ -147,41 +130,41 @@
         const blob = await response.blob();
         const processedImageURL = URL.createObjectURL(blob);
 
-        // Create a canvas to enhance image quality
-        const img = new Image();
-        img.src = processedImageURL;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width; // Keep the original image size
-          canvas.height = img.height; // Keep the original image size
-          const ctx = canvas.getContext('2d');
+        if (option === 'photoshop') {
+          // Create a canvas to add background color
+          const img = new Image();
+          img.src = processedImageURL;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
 
-          // Draw the image on canvas
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            // Fill canvas with background color
+            ctx.fillStyle = '#0044ff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Draw image on top
+            ctx.drawImage(img, 0, 0);
 
-          // Apply a slight sharpening filter to enhance the image quality
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const data = imageData.data;
-          const sharpen = (data) => {
-            for (let i = 0; i < data.length; i += 4) {
-              data[i] = data[i] * 1.1;     // Red
-              data[i + 1] = data[i + 1] * 1.1; // Green
-              data[i + 2] = data[i + 2] * 1.1; // Blue
-            }
+            const finalImageURL = canvas.toDataURL('image/png');
+
+            resultDiv.innerHTML = `
+              <div>
+                <img src="${finalImageURL}" alt="Processed Image">
+                <br>
+                <a href="${finalImageURL}" download="Processed_Image.png">Download Image</a>
+              </div>
+            `;
           };
-          sharpen(data);
-          ctx.putImageData(imageData, 0, 0);
-
-          const finalImageURL = canvas.toDataURL('image/png');
-
+        } else {
           resultDiv.innerHTML = `
             <div>
-              <img src="${finalImageURL}" alt="Processed Image">
+              <img src="${processedImageURL}" alt="Processed Image">
               <br>
-              <a href="${finalImageURL}" download="Processed_Image.png">Download Image</a>
+              <a href="${processedImageURL}" download="Processed_Image.png">Download Image</a>
             </div>
           `;
-        };
+        }
       } catch (error) {
         resultDiv.innerHTML = '<p style="color:white;">Error processing image. Try again.</p>';
         console.error(error);
