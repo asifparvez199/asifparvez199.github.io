@@ -6,30 +6,31 @@
   <title>Background Remover</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
-      background-color: #001f3f; /* Navy Blue */
+      background-color: #121212; /* Dark background */
       margin: 0;
       padding: 20px;
-      color: white; /* White text for contrast */
+      color: #e0e0e0; /* Light text for contrast */
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 20px;
-      color: #ffffff; /* White for header */
+      color: #bb86fc; /* Light purple header */
     }
 
     label {
       display: inline-block;
       padding: 10px 20px;
-      background-color: #001f3f; /* Navy Blue */
-      color: white;
-      border: 2px solid white;
+      background-color: #1f1f1f; /* Slightly lighter background */
+      color: #e0e0e0;
+      border: 2px solid #bb86fc;
       border-radius: 5px;
       cursor: pointer;
       margin-bottom: 20px;
       font-size: 16px;
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     input[type="file"] {
@@ -38,17 +39,19 @@
 
     button, a {
       padding: 10px 20px;
-      background-color: #001f3f; /* Navy Blue */
-      color: white;
-      border: 2px solid white;
+      background-color: #1f1f1f;
+      color: #e0e0e0;
+      border: 2px solid #bb86fc;
       border-radius: 5px;
       cursor: pointer;
       margin-top: 10px;
       text-decoration: none;
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     button:hover, a:hover {
-      background-color: #003366; /* Slightly lighter Navy */
+      background-color: #323232; /* Lighter dark background */
+      border-color: #bb86fc;
     }
 
     img {
@@ -63,7 +66,7 @@
       width: 50px;
       height: 50px;
       border: 5px solid #f3f3f3;
-      border-top: 5px solid #001f3f; /* Navy Blue Spinner */
+      border-top: 5px solid #bb86fc; /* Spinner in light purple */
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -71,6 +74,21 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    select {
+      background-color: #1f1f1f; /* Slightly lighter background */
+      color: #e0e0e0;
+      border: 2px solid #bb86fc;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: border-color 0.3s;
+    }
+
+    select:hover {
+      border-color: #bb86fc;
     }
   </style>
 </head>
@@ -135,15 +153,15 @@
           img.src = processedImageURL;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
+            canvas.width = 1920; // Set width to 1080p resolution
+            canvas.height = 1080; // Set height to 1080p resolution
             const ctx = canvas.getContext('2d');
 
             // Fill canvas with background color
             ctx.fillStyle = '#0044ff';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             // Draw image on top
-            ctx.drawImage(img, 0, 0);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
             const finalImageURL = canvas.toDataURL('image/png');
 
