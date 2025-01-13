@@ -3,75 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The PrimeDark - About</title>
+    <title>About MD. Asif Parvez</title>
     <style>
         body {
+            background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: white;
-            overflow: hidden;
-        }
-        .container {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #fff;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-        .header {
-            font-size: 4em;
-            color: white;
-            text-shadow: 0 0 10px blue, 0 0 20px blue, 0 0 30px blue;
-            animation: flicker 4s infinite;
+        h1, h2 {
+            margin: 10px 0;
         }
-        .header.flicker {
-            color: black;
+        a {
+            color: #ffd700;
+            text-decoration: none;
         }
-        @keyframes flicker {
-            0%, 95% { text-shadow: 0 0 10px blue, 0 0 20px blue, 0 0 30px blue; }
-            96%, 100% { text-shadow: 0 0 5px darkblue; }
-        }
-        .discord {
-            margin-top: 20px;
-        }
-        .discord img {
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .discord img:hover {
-            transform: scale(1.1);
-        }
-        .lighting {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 255, 0.5);
-            z-index: -1;
-            animation: lightFlicker 6s infinite;
-        }
-        @keyframes lightFlicker {
-            0%, 90% { background-color: rgba(0, 0, 255, 0.5); }
-            91%, 100% { background-color: rgba(0, 0, 0, 0.7); }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="lighting"></div>
     <div class="container">
-        <div class="header">The PrimeDark</div>
-        <div class="discord">
-            <a href="https://discord.gg/HfQpUuRJDB" target="_blank">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Discord_Logo.png" alt="Discord">
-            </a>
-        </div>
+        <h1>MD. Asif Parvez</h1>
+        <h2>Age: 13</h2>
+        <p>Hobby: Be A Coder</p>
+        <p>DiscordID: asifparvez_</p>
+        <p>Connect with me:</p>
+        <p>
+            <a href="https://www.facebook.com/asif.parvez.80" target="_blank">Facebook</a> |
+            <a href="https://youtube.com/@Primedark69" target="_blank">YouTube</a>
+        </p>
     </div>
+    <script>
+        // JavaScript for additional interactivity can go here
+    </script>
 </body>
 </html>
