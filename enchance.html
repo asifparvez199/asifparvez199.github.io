@@ -24,9 +24,6 @@
             width: 80%;
             max-width: 500px;
         }
-        .container input {
-            margin-bottom: 20px;
-        }
         .container img {
             max-width: 100%;
             height: auto;
@@ -40,6 +37,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin: 10px;
         }
         .button:hover {
             background-color: #0056b3;
@@ -51,12 +49,16 @@
         .download-btn:hover {
             background-color: #218838;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Photo Quality Enhancer</h1>
-        <input type="file" id="imageInput" accept="image/*">
+        <input type="file" id="imageInput" accept="image/*" class="hidden">
+        <button class="button" onclick="document.getElementById('imageInput').click()">Upload Image</button>
         <button class="button" onclick="enhanceImage()">Enhance Image</button>
         <div id="output"></div>
     </div>
