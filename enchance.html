@@ -3,90 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Quality Enhancer</title>
+    <title>Photo Enhancer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #1e1e1e;
-            color: #ffffff;
         }
         .container {
-            text-align: center;
-            background: #333;
+            background: #fff;
             padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
-            width: 80%;
-            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-        .container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-top: 20px;
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
         }
-        .button {
-            background-color: #007bff;
+        .btn {
+            border: 2px solid #0099cc;
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
+            background-color: #0099cc;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
-            margin: 10px;
         }
-        .button:hover {
-            background-color: #0056b3;
-        }
-        .download-btn {
-            background-color: #28a745;
-            margin-top: 20px;
-        }
-        .download-btn:hover {
-            background-color: #218838;
-        }
-        .hidden {
-            display: none;
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Photo Quality Enhancer</h1>
-        <input type="file" id="imageInput" accept="image/*" class="hidden">
-        <button class="button" onclick="document.getElementById('imageInput').click()">Upload Image</button>
-        <button class="button" onclick="enhanceImage()">Enhance Image</button>
-        <div id="output"></div>
+        <h1>Enhance Your Photo</h1>
+        <div class="upload-btn-wrapper">
+            <button class="btn">Upload Photo</button>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+        <p id="message"></p>
     </div>
+
     <script>
-        function enhanceImage() {
-            const fileInput = document.getElementById('imageInput');
-            const output = document.getElementById('output');
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('image_file', file);
 
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    output.innerHTML = '';
-                    output.appendChild(img);
-
-                    const downloadButton = document.createElement('a');
-                    downloadButton.href = e.target.result;
-                    downloadButton.download = 'enhanced-image.png';
-                    downloadButton.className = 'button download-btn';
-                    downloadButton.textContent = 'Download Enhanced Image';
-                    output.appendChild(downloadButton);
+                const options = {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'API-Key': '0c19c505165e4e1eba27cbc809bf2ded'
+                    }
                 };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                alert('Please select an image to enhance.');
+
+                fetch('https://www.cutout.pro/api/v1/enhance', options)
+                    .then(response => response.json())
+                    .then(data => {
+                        const message = document.getElementById('message');
+                        if (data && data.url) {
+                            message.innerHTML = `<a href="${data.url}" download>Download Enhanced Photo</a>`;
+                        } else {
+                            message.textContent = 'Failed to enhance the photo.';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('message').textContent = 'An error occurred. Please try again.';
+                    });
             }
-        }
+        });
     </script>
 </body>
 </html>
