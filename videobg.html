@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Background Remover</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #87CEEB; /* Sky blue */
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        header {
+            position: relative;
+            z-index: 2;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .container {
+            position: relative;
+            z-index: 2;
+        }
+        .upload-btn {
+            width: 150px;
+            height: 150px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .upload-btn:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        #download-btn {
+            display: none;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        #download-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Background Animation */
+        .animated-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(128, 0, 128, 0.6); /* Dark purple */
+            animation: move 10s infinite linear;
+            mix-blend-mode: screen;
+        }
+
+        /* Animations */
+        @keyframes move {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50px) translateX(50px);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(-100px);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>Video Background Remover</header>
+    <div class="container">
+        <input type="file" id="file-input" class="hidden" accept="video/*">
+        <button class="upload-btn" onclick="document.getElementById('file-input').click();">Upload</button>
+        <button id="download-btn">Download</button>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="animated-bg">
+        <!-- Randomly generated circular shapes -->
+        <div class="circle" style="width: 150px; height: 150px; top: 10%; left: 20%; animation-duration: 8s;"></div>
+        <div class="circle" style="width: 100px; height: 100px; top: 40%; left: 60%; animation-duration: 12s;"></div>
+        <div class="circle" style="width: 200px; height: 200px; top: 80%; left: 30%; animation-duration: 15s;"></div>
+        <div class="circle" style="width: 120px; height: 120px; top: 50%; left: 10%; animation-duration: 10s;"></div>
+        <div class="circle" style="width: 180px; height: 180px; top: 20%; left: 70%; animation-duration: 14s;"></div>
+    </div>
+
+    <script>
+        const uploadBtn = document.querySelector(".upload-btn");
+        const fileInput = document.getElementById("file-input");
+        const downloadBtn = document.getElementById("download-btn");
+
+        fileInput.addEventListener("change", async () => {
+            const file = fileInput.files[0];
+            if (!file) return alert("No file selected!");
+
+            uploadBtn.textContent = "Processing...";
+            uploadBtn.style.backgroundColor = "#FFA500";
+
+            try {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const response = await fetch("https://api.unscreen.com/v1.0/videos", {
+                    method: "POST",
+                    headers: {
+                        "x-api-key": "38MieYz9s8Y4evrmH4hbSCBB",
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) throw new Error("Failed to process video");
+
+                const data = await response.json();
+                const downloadUrl = data.data.url;
+
+                uploadBtn.textContent = "Upload";
+                uploadBtn.style.backgroundColor = "#4CAF50";
+
+                downloadBtn.style.display = "inline-block";
+                downloadBtn.onclick = () => {
+                    window.open(downloadUrl, "_blank");
+                };
+            } catch (error) {
+                alert("Error processing video: " + error.message);
+                uploadBtn.textContent = "Upload";
+                uploadBtn.style.backgroundColor = "#4CAF50";
+            }
+        });
+    </script>
+</body>
+</html>
