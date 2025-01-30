@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #2e2e2e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 300px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #fileList {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .file-item span {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .remove-button {
+            background-color: #ff4c4c;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Your Files</h1>
+        <input type="file" id="fileInput" multiple>
+        <input type="text" id="removalTime" placeholder="Enter time (e.g., 1m, 10s)" />
+        <button id="uploadButton">Upload</button>
+        <div id="fileList"></div>
+    </div>
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const removalTimeInput = document.getElementById('removalTime').value;
+
+            // Function to parse the removal time input
+            function parseTime(input) {
+                const unit = input.slice(-1);
+                const value = parseInt(input.slice(0, -1), 10);
+                if (unit === 'm') {
+                    return value * 60000; // Convert minutes to milliseconds
+                } else if (unit === 's') {
+                    return value * 1000; // Convert seconds to milliseconds
+                } else {
+                    return 600000; // Default to 10 minutes in milliseconds
+                }
+            }
+
+            const removalTime = parseTime(removalTimeInput) || 600000; // Default to 10 minutes if input is invalid
+
+            for (const file of fileInput.files) {
+                const fileItem = document.createElement('div');
+                fileItem.classList.add('file-item');
+
+                const fileName = document.createElement('span');
+                fileName.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+
+                const downloadButton = document.createElement('button');
+                downloadButton.textContent = 'Download';
+                downloadButton.addEventListener('click', () => {
+                    const url = URL.createObjectURL(file);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = file.name;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+
+                const removeButton = document.createElement('button');
+                removeButton.classList.add('remove-button');
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', () => {
+                    fileItem.remove();
+                });
+
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(downloadButton);
+                fileItem.appendChild(removeButton);
+                fileList.appendChild(fileItem);
+
+                // Set a timeout to remove the file item after the specified removal time
+                setTimeout(() => {
+                    fileItem.remove();
+                }, removalTime);
+            }
+        });
+    </script>
+</body>
+</html>
