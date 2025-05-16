@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #001f3f, #003366);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(0, 51, 102, 0.85);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .animated-title {
+            font-size: 36px;
+            text-shadow: 0 0 20px #66ccff;
+            animation: glowingTitle 2s infinite alternate;
+        }
+
+        .module .animated-box {
+            padding: 10px;
+            border-bottom: 1px solid #004080;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        a {
+            color: #66ccff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        a:hover {
+            color: #99e6ff;
+            text-shadow: 0 0 10px #99e6ff;
+        }
+
+        .animated-footer {
+            font-size: 12px;
+            opacity: 0.8;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes glowingTitle {
+            from { text-shadow: 0 0 10px #66ccff; }
+            to { text-shadow: 0 0 20px #99e6ff; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="animated-title">About Me</h1>
+        <div class="module">
+            <div class="animated-box">
+                <p><strong>Discord UserID:</strong> Phyco#1234</p>
+            </div>
+            <div class="animated-box">
+                <p><strong>YouTube:</strong> <a href="https://youtube.com/yourchannel" target="_blank">Visit Channel</a></p>
+            </div>
+            <div class="animated-box">
+                <p><strong>Facebook:</strong> <a href="https://facebook.com/yourprofile" target="_blank">Visit Profile</a></p>
+            </div>
+            <div class="animated-box">
+                <p><strong>Instagram:</strong> <a href="https://instagram.com/yourprofile" target="_blank">Visit Profile</a></p>
+            </div>
+            <div class="animated-box">
+                <p><strong>Website:</strong> <a href="https://yourwebsite.com" target="_blank">Visit Site</a></p>
+            </div>
+            <div class="animated-box">
+                <p><strong>Name:</strong> Asif</p>
+            </div>
+            <div class="animated-box">
+                <p><strong>Age:</strong> 25</p>
+            </div>
+            <div class="animated-box">
+                <p><strong>About Me:</strong> Passionate about Discord bot development, security systems, and creative design.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p class="animated-footer">Copyright © CodeVerse 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let elements = document.querySelectorAll(".animated-box");
+
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.transform = "translateY(0)";
+                    el.style.opacity = "1";
+                }, index * 200);
+            });
+
+            let title = document.querySelector(".animated-title");
+            setInterval(() => {
+                title.classList.toggle("glow");
+            }, 1500);
+        });
+    </script>
+
+</body>
+</html>
